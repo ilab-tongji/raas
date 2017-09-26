@@ -1,0 +1,12 @@
+
+#remote: True
+
+mongo:
+  host: ds149124.mlab.com
+  db: raas
+  port: 49124
+  username: raas
+  password: raas
+
+
+

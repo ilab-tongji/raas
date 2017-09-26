@@ -1,4 +1,6 @@
-mongoengine
 flask
 flask-cors
 tornado
+pymongo==3.5.1
+requests==2.13.0
+pyyaml==3.12

@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from flask import Flask, send_from_directory,render_template, request, session, redirect, url_for, jsonify
 from flask_cors import CORS
-from qa import storage
+from qa import qa_service
 import os
 
 
@@ -24,11 +24,11 @@ def hello_world():
 def get_file(filename):
     return send_from_directory('static', filename)
 
-@app.route('/qa/map',methods=['GET','POST'])
-def get_location():
-    location=request.form['location']
-    ans=storage.query('map',{'location':location})
-    return render_template('homepage.html',answer=ans)
+@app.route('/service/qa',methods=['POST'])
+def get_answer():
+    mock = {'type': 'map', 'slots': {'location': 'toilet'}}
+    answer = qa_service.get_answer(mock['type'],mock['slots'])
+    return render_template('homepage.html',answer=answer)
 
 
 

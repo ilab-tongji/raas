@@ -26,7 +26,7 @@ def get_file(filename):
 
 @app.route('/service/qa',methods=['POST'])
 def get_answer():
-    mock = {'type': 'map', 'slots': {'location': 'toilet'}}
+    mock = {'type': 'weather', 'slots': {'city': 'shanghai','day':0}}
     answer = qa_service.get_answer(mock['type'],mock['slots'])
     return render_template('homepage.html',answer=answer)
 

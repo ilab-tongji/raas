@@ -1,7 +1,7 @@
 import requests
 
 
-def today_weather(city, index):
+def today_weather(city='shanghai', index=0):
     url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + city + '&output=json&ak=KPGX6sBfBZvz8NlDN5mXDNBF&callback='
     r = requests.get(url)
     data = {}

@@ -4,10 +4,11 @@ built_in_type=['map']
 third_party_service=['weather']
 
 
-
-def get_answer(t,slots):
+def get_answer(inner):
+    t = inner['t']
+    slots = inner['slots']
     if t in built_in_type:
-        answer=storage.query(t,slots)
+        answer=storage.query(t, slots)
     elif t in third_party_service:
         answer= thrid_party_map[t](slots)
     else:
@@ -19,7 +20,7 @@ def get_answer(t,slots):
 
 
 def get_weather(slots):
-    data=weather.today_weather(slots['city'],slots['day'])
+    data=weather.today_weather(slots['city'], slots['day'])
 
     if data is None:
         answer='error'

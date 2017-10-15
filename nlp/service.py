@@ -25,7 +25,6 @@ class AirConditionerService(object):
 
     def open(self,entities):
         neces=necessary_request['appliance']['air conditioner']['on']
-        print neces
         for nece in neces:
             if not(nece in entities.keys()):
                 if nece == 'location':

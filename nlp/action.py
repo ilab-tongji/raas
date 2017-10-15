@@ -10,8 +10,19 @@ class SendTextAction(Action):
 
 
 class SaveContextAction(Action):
-    def __init__(self, context, storyid):
+    def __init__(self, context, intent_type, storyid=None):
         super(SaveContextAction, self).__init__('savecontext')
         self.context = context
+        self.intent_type = intent_type
         self.storyid = storyid
+
+
+class Reaction(object):
+    def __init__(self, actions, intent, storyend=True):
+        self.actions = actions
+        self.intent = intent
+        self.storyend = storyend
+
+
+
 

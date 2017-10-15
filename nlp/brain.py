@@ -14,7 +14,6 @@ class Brain(object):
         tras = translate(sentence)
         print(tras)
         wit = wit_ai(tras)
-        print(wit)
         intent = Intent(wit)
         if storyid is not None:
             intent.storyid = storyid

@@ -6,6 +6,8 @@ from qa import qa_service
 import os
 from nlp.interpreter import analyse
 from distribution import distribute
+from nlp.brain import Brain
+from flask import g, current_app
 
 
 # create 'static' folder
@@ -15,6 +17,8 @@ if not os.path.isdir(os.path.join(os.path.dirname(__file__), 'static')):
 
 app = Flask(__name__)
 CORS(app)
+
+cache = {'storyid': None}
 
 
 @app.route('/')
@@ -59,12 +63,12 @@ def ask():
     question = data['question']
     # question = request.form['question']
     # print question
-    inner = analyse(question)
-    service = distribute(inn=inner)
-    answer = service(inner)
+    r = Brain().listen(question, cache['storyid'])
+    cache['storyid'] = r.get('storyid', None)
+    print (cache['storyid'])
     resp = {
         'instructions': {
-            'say': answer
+            'say': r['text']
         }
     }
     return jsonify(resp)

@@ -1,14 +1,9 @@
 from nlp.action import SendTextAction, SaveContextAction, Reaction
 from nlp.context import ContextManager
+from nlp.service import AirConditionerService
 
 
-class Service(object):
-    def __init__(self):
-        pass
-    def open(self,intent):
-        return 'need location', 'need location'
 
-service = Service()
 
 
 class Logic(object):
@@ -26,7 +21,8 @@ class IntentResolver(object):
         self.intent = intent
         self.contextmgr = ContextManager()
         former_context = self.contextmgr.get_context(intent.storyid)
-        self.intent.entities.update(former_context)
+        self.overall_intent_entities = self.intent.entities.copy()
+        self.overall_intent_entities.update(former_context)
         self.storyend = True
 
     def resolve(self):
@@ -58,7 +54,9 @@ class OpenApplicanceIntentResolver(IntentResolver):
 
     def resolve(self):
         actions = []
-        err, text = service.open(self.intent.entities)
+        r = AirConditionerService().open(self.overall_intent_entities)
+        err = r['err']
+        text = r['text']
         actions.append(SendTextAction(text))
         if err:
             actions.append(SaveContextAction(self.intent.raw_intent['entities'],
@@ -85,12 +83,11 @@ class IntentResolverFactory(object):
 if __name__ == '__main__':
     from mockdata import data, data2
     from nlp.intent import Intent
+    from uuid import uuid4
     intent1 = Intent(data)
-    intent1.storyid = 'xxx'
-    intent2 = Intent(data2)
-    intent2.storyid = 'xxx'
     logic1 = Logic()
-    print logic1.understand(intent1)
+    r = logic1.understand(intent1)
+    intent2 = Intent(data2)
     logic2 = Logic()
-    print logic2.understand(intent2)
+    a =  logic2.understand(intent2)
     print 1

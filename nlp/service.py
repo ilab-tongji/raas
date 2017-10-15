@@ -1,3 +1,4 @@
+#coding=UTF-8
 necessary_request={
     "appliance":{
         "air conditioner":{
@@ -7,29 +8,44 @@ necessary_request={
     }
 }
 
-class service(object):
-    def __init__(self,type):
-        self.type=type
+class Service(object):
+    def __init__(self):
+        pass
 
-class appliance_service(object):
-    def __init__(self,appliance_name):
-        super(service,self).__init__('appliance')
+class ApplianceService(object):
+    def __init__(self):
+        pass
+    def open(self):
+        raise NotImplementedError
 
-class airConditioner_service(object):
-    def __init__(self,intent):
-        super(appliance_service,self).__init__('air conditioner')
-        self.intent=intent
 
-    def necessity_check(self):
-        entities=self.intent.entities
-        intent=entities['intent'][0]['value']
-        if intent == 'open appliance':
-            neces=necessary_request['appliance']['air conditioner']['on']
-            for nece in neces:
-                if not(nece in entities):
-                    res={'type':'missing value'}
-                    return
+class AirConditionerService(object):
+    def __init__(self):
+        pass
+
+    def open(self,entities):
+        neces=necessary_request['appliance']['air conditioner']['on']
+        print neces
+        for nece in neces:
+            if not(nece in entities.keys()):
+                if nece == 'location':
+                    text='请问是哪里的空调？'
+                elif nece == 'temperature':
+                    text='请问要调到多少度？'
+                res={'err':'missing value','slot':nece,'text':text}
+                return res
+        res={'err':None,'text':'空调已打开'}
+        print res
+        return res
 
 if __name__=='__main__':
-    print necessary_request['appliance']['air conditioner']['on']
+    ss=AirConditionerService()
+    entities={
+      "intent": "open_appliance",
+      "device": "air condition",
+      "location":"bedroom",
+      "temperature":'25 degrees'
+    }
+    ss.open(entities)
+    #print necessary_request['appliance']['air conditioner']['on']
 

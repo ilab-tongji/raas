@@ -33,7 +33,7 @@ if __name__ == '__main__':
     print(r['text'])
     r = brain.listen('卧室', r['storyid'])
     print(r['text'])
-    r = brain.listen(('25度', r['storyid']))
+    r = brain.listen('25度', r['storyid'])
     print(r['text'])
 
 

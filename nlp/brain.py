@@ -13,12 +13,8 @@ class Brain(object):
     def listen(self, sentence, storyid=None):
         tras = Translate().translate(sentence)
         print(tras)
-<<<<<<< HEAD
         wit = WitAi().wit_ai(tras)
         print(wit)
-=======
-        wit = wit_ai(tras)
->>>>>>> b5133c941b96783d9ac4b3085f6ad001008543f8
         intent = Intent(wit)
         if storyid is not None:
             intent.storyid = storyid

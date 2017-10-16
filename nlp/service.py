@@ -39,25 +39,26 @@ class AirConditionerService(ApplianceService):
         return res
 
 
-class ApplianceServiceHandle(object):
+class ApplianceServiceFactory(object):
     def __init__(self):
         pass
     service_map={
-        'air conditioner':AirConditionerService
+        'open_airConditioner':AirConditionerService
     }
 
     @classmethod
     def get_service(cls,name):
         return cls.service_map[name]
 
+
 if __name__=='__main__':
     entities={
-      "intent": "open_appliance",
-      "device": "air condition",
+      "intent": "open_airConditioner",
+      "device": "air conditioner",
       "location":"bedroom",
       "temperature":'25 degrees'
     }
-    handle=ApplianceServiceHandle().get_service('air conditioner')()
+    handle=ApplianceServiceHandle().get_service('open_airConditioner')()
     print handle
     handle.open(entities)
     #print necessary_request['appliance']['air conditioner']['on']

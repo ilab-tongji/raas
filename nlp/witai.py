@@ -6,6 +6,6 @@ class WitAi(object):
         pass
 
     def wit_ai(self, message):
-        client = Wit('FYVFNVKD6B6UNRB24AWOTB4726YBNXKT')
+        client = Wit('TXONRQB3KTHTF57HOXPNTM3N5ED3CBXY')
         resp = client.message(message)
         return resp

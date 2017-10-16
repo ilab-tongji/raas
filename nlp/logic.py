@@ -1,6 +1,6 @@
 from nlp.action import SendTextAction, SaveContextAction, Reaction
 from nlp.context import ContextManager
-from nlp.service import AirConditionerService
+from nlp.service import ApplianceServiceFactory
 
 
 
@@ -48,13 +48,13 @@ class IntentResolver(object):
 #         return 2
 
 
-class OpenApplicanceIntentResolver(IntentResolver):
+class OpenAirConditionerIntentResolver(IntentResolver):
     def __init__(self, intent):
-        super(OpenApplicanceIntentResolver, self).__init__(intent)
+        super(OpenAirConditionerIntentResolver, self).__init__(intent)
 
     def resolve(self):
         actions = []
-        r = AirConditionerService().open(self.overall_intent_entities)
+        r = ApplianceServiceFactory.get_service('open_airConditioner')().open(self.overall_intent_entities)
         err = r['err']
         text = r['text']
         actions.append(SendTextAction(text))
@@ -68,9 +68,9 @@ class OpenApplicanceIntentResolver(IntentResolver):
 
 class IntentResolverFactory(object):
     map = {
-        'open_appliance': OpenApplicanceIntentResolver,
-        'appliance_location': OpenApplicanceIntentResolver,
-        'temperature': OpenApplicanceIntentResolver
+        'open_airConditioner': OpenAirConditionerIntentResolver,
+        'location': OpenAirConditionerIntentResolver,
+        'temperature': OpenAirConditionerIntentResolver
     }
 
     def __init__(self):

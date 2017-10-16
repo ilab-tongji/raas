@@ -9,19 +9,20 @@ necessary_request={
 }
 
 class Service(object):
-    def __init__(self):
-        pass
+    def __init__(self,type):
+        self.type=type
 
-class ApplianceService(object):
-    def __init__(self):
-        pass
+class ApplianceService(Service):
+    def __init__(self,name):
+        super(ApplianceService,self).__init__('appliance')
+        self.name=name
     def open(self):
         raise NotImplementedError
 
 
-class AirConditionerService(object):
+class AirConditionerService(ApplianceService):
     def __init__(self):
-        pass
+        super(AirConditionerService,self).__init__('air conditioner')
 
     def open(self,entities):
         neces=necessary_request['appliance']['air conditioner']['on']
@@ -37,14 +38,27 @@ class AirConditionerService(object):
         print res
         return res
 
+
+class ApplianceServiceHandle(object):
+    def __init__(self):
+        pass
+    service_map={
+        'air conditioner':AirConditionerService
+    }
+
+    @classmethod
+    def get_service(cls,name):
+        return cls.service_map[name]
+
 if __name__=='__main__':
-    ss=AirConditionerService()
     entities={
       "intent": "open_appliance",
       "device": "air condition",
       "location":"bedroom",
       "temperature":'25 degrees'
     }
-    ss.open(entities)
+    handle=ApplianceServiceHandle().get_service('air conditioner')()
+    print handle
+    handle.open(entities)
     #print necessary_request['appliance']['air conditioner']['on']
 

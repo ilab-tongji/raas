@@ -1,8 +1,8 @@
 # encoding=UTF-8
 from nlp.logic import Logic
 from nlp.intent import Intent
-from nlp.traslate import translate
-from nlp.witai import wit_ai
+from nlp.traslate import Translate
+from nlp.witai import WitAi
 from nlp.response import Response
 
 
@@ -11,9 +11,10 @@ class Brain(object):
         pass
 
     def listen(self, sentence, storyid=None):
-        tras = translate(sentence)
+        tras = Translate().translate(sentence)
         print(tras)
-        wit = wit_ai(tras)
+        wit = WitAi().wit_ai(tras)
+        print(wit)
         intent = Intent(wit)
         if storyid is not None:
             intent.storyid = storyid

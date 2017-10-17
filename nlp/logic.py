@@ -1,7 +1,7 @@
 from nlp.action import SendTextAction, SaveContextAction, Reaction
 from nlp.context import ContextManager
-from nlp.service import ApplianceServiceFactory
-
+from appliance.appliance_service import ApplianceServiceFactory
+from qa.weather_service import WeatherService
 
 
 
@@ -65,12 +65,23 @@ class OpenAirConditionerIntentResolver(IntentResolver):
             self.storyend = False
         return Reaction(actions, self.intent, self.storyend)
 
+class GetWeatherIntentResolver(IntentResolver):
+    def __init__(self, intent):
+        super(GetWeatherIntentResolver,self).__init__(intent)
+
+    def resolve(self):
+        actions = []
+        r = WeatherService().getWeather(self.overall_intent_entities)
+        actions.append(SendTextAction(r))
+        self.storyend = True
+        return Reaction(actions, self.intent, self.storyend)
 
 class IntentResolverFactory(object):
     map = {
         'open_airConditioner': OpenAirConditionerIntentResolver,
         'location': OpenAirConditionerIntentResolver,
-        'temperature': OpenAirConditionerIntentResolver
+        'temperature': OpenAirConditionerIntentResolver,
+        'get_weather': GetWeatherIntentResolver
     }
 
     def __init__(self):

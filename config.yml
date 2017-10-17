@@ -1,5 +1,5 @@
 
-#remote: True
+remote: True
 
 mongo:
   host: ds149124.mlab.com

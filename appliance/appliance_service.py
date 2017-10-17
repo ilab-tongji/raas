@@ -1,4 +1,7 @@
 #coding=UTF-8
+from service import Service
+
+
 necessary_request={
     "appliance":{
         "air conditioner":{
@@ -8,9 +11,6 @@ necessary_request={
     }
 }
 
-class Service(object):
-    def __init__(self,type):
-        self.type=type
 
 class ApplianceService(Service):
     def __init__(self,name):
@@ -48,17 +48,3 @@ class ApplianceServiceFactory(object):
     @classmethod
     def get_service(cls,name):
         return cls.service_map[name]
-
-
-if __name__=='__main__':
-    entities={
-      "intent": "open_airConditioner",
-      "device": "air conditioner",
-      "location":"bedroom",
-      "temperature":'25 degrees'
-    }
-    handle=ApplianceService().get_service('open_airConditioner')()
-    print handle
-    handle.open(entities)
-    #print necessary_request['appliance']['air conditioner']['on']
-

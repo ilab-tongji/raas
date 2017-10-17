@@ -13,6 +13,7 @@ class Intent(object):
             self.entities = raw['entities']
 
 
+
 if __name__ == '__main__':
     from mockdata import data
     print Intent(data).entities

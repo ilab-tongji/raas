@@ -6,3 +6,4 @@ requests==2.13.0
 pyyaml==3.12
 jieba
 wit
+pyaudio

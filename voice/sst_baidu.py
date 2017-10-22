@@ -10,7 +10,7 @@ class SST:
     # chunk is the size of bytes once read; rate is the .wav file sampling rate(16000 or 8000); threshold is the silence
     # threshold, which belows it will be seen as quiet; silence_limit is the silence time mic wait; prev_audio is the pre_get
     # voice to avoid losing information
-    def __init__(self, chunk=1024, rate=16000, threshold=2600, silence_limit=2, prev_audio=1):
+    def __init__(self, chunk=2048, rate=16000, threshold=2600, silence_limit=2, prev_audio=1):
         self.lang_code = 'en-US'
         self.chunk = chunk
         self.format = pyaudio.paInt16
@@ -68,12 +68,18 @@ class SST:
                 # Remove temp file. Comment line to review.
                 os.remove(filename)
                 # Reset all
+                stream.close()
+                stream = p.open(format=self.format,
+                                channels=self.channels,
+                                rate=self.rate,
+                                input=True,
+                                frames_per_buffer=self.chunk)
                 started = False
                 slid_win = deque(maxlen=self.silence_limit * rel)
                 prev_audio = deque(maxlen=0.5 * rel)
                 audio2send = []
                 n -= 1
-                print "Listening ..."
+                print 'Listening'
             else:
                 prev_audio.append(cur_data)
         print "* Done recording"
@@ -96,4 +102,4 @@ def save_speech(data, p, rate):
 
 
 if(__name__ == '__main__'):
-    SST().listen_for_speech(5)
+    SST().listen_for_speech(-1)

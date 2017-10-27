@@ -8,6 +8,8 @@ from nlp.interpreter import analyse
 from distribution import distribute
 from nlp.brain import Brain
 from flask import g, current_app
+from flask_socketio import SocketIO, emit
+
 
 
 # create 'static' folder
@@ -21,9 +23,9 @@ CORS(app)
 cache = {'storyid': None}
 
 
-@app.route('/')
-def hello_world():
-    return render_template('homepage.html')
+# @app.route('/')
+# def hello_world():
+#     return render_template('homepage.html')
 
 
 @app.route('/getfile/<string:filename>', methods=['GET'])
@@ -73,6 +75,27 @@ def ask():
     }
     return jsonify(resp)
 
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@socketio.on('receive_msg')
+def receive_msg(msg):
+    emit('server_response',{'data': msg['data']})
+
+@socketio.on('client_event')
+def client_msg(msg):
+    emit('server_response', {'data': msg['data']})
+
+@socketio.on('connect_event')
+def connected_msg(msg):
+    emit('server_response', {'data': msg['data']})
+
+
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    socketio.run(app)

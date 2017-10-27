@@ -20,6 +20,7 @@ class Brain(object):
             intent.storyid = storyid
         r = Logic().understand(intent)
         resp = Response().handle_reaction(r)
+
         return resp
 
 

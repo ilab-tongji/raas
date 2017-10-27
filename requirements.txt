@@ -7,3 +7,5 @@ pyyaml==3.12
 jieba
 wit
 pyaudio
+flask-socketio
+gevent

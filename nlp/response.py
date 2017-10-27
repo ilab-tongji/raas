@@ -5,7 +5,7 @@ class Response(object):
         pass
 
     def handle_reaction(self, reaction):
-        resps = {}
+        resps = {'intent_type': reaction.intent.intent_type}
         for action in reaction.actions:
             handler = ActionHandlerFactory.get_handler(action.type)()
             resp = handler.handle(action)

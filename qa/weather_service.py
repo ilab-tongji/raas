@@ -11,7 +11,9 @@ class WeatherService(Service):
         if entities.get('location') is None:
             weather = self.today_weather()
         else:
-            city = entities['location'][0]['value']
+            city = 'shanghai'
+            if entities['location'][0]['confidence'] > 0.93:
+                city = entities['location'][0]['value']
             weather = self.today_weather(city)
         return weather['weather']
 

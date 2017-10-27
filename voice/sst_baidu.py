@@ -102,4 +102,4 @@ def save_speech(data, p, rate):
 
 
 if(__name__ == '__main__'):
-    SST().listen_for_speech(-1)
+    SST().listen_for_speech(1)

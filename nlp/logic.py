@@ -4,8 +4,7 @@ from appliance.appliance_service import ApplianceServiceFactory
 from qa.weather_service import WeatherService
 from move.move_service import MoveService
 from qa.greeting_service import GreetService
-
-
+from sensor.sensor_service import SensorServiceFactory
 
 
 class Logic(object):
@@ -67,6 +66,7 @@ class OpenAirConditionerIntentResolver(IntentResolver):
             self.storyend = False
         return Reaction(actions, self.intent, self.storyend)
 
+
 class GetWeatherIntentResolver(IntentResolver):
     def __init__(self, intent):
         super(GetWeatherIntentResolver,self).__init__(intent)
@@ -78,6 +78,7 @@ class GetWeatherIntentResolver(IntentResolver):
         self.storyend = True
         return Reaction(actions, self.intent, self.storyend)
 
+
 class MoveIntentResolver(IntentResolver):
     def __init__(self, intent):
         super(MoveIntentResolver, self).__init__(intent)
@@ -88,6 +89,7 @@ class MoveIntentResolver(IntentResolver):
         err = r['err']
         text = r['text']
         actions.append(SendTextAction(text))
+
 
 class GreetIntentResolver(IntentResolver):
     def __init__(self, intent):
@@ -101,6 +103,17 @@ class GreetIntentResolver(IntentResolver):
         return Reaction(actions, self.intent, self.storyend)
 
 
+class SensorIntentResolver(IntentResolver):
+    def __init__(self, intent):
+        super(SensorIntentResolver, self).__init__(intent)
+
+    def resolve(self):
+        actions = []
+        r = SensorServiceFactory.get_service('get_pm').get_data()
+        actions.append(SendTextAction(r))
+        self.storyend = True
+        return Reaction(actions, self.intent, self.storyend)
+
 
 class IntentResolverFactory(object):
     map = {
@@ -109,7 +122,8 @@ class IntentResolverFactory(object):
         'temperature': OpenAirConditionerIntentResolver,
         'get_weather': GetWeatherIntentResolver,
         'move': MoveIntentResolver,
-        'greeting':GreetIntentResolver
+        'greeting': GreetIntentResolver,
+        'sensor': SensorIntentResolver
     }
 
     def __init__(self):

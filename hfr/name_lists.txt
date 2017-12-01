@@ -1,0 +1,6 @@
+(lp0
+S'Long'
+p1
+aS'Hu'
+p2
+a.

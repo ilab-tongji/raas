@@ -2,6 +2,7 @@ from nlp.action import SendTextAction, SaveContextAction, Reaction
 from nlp.context import ContextManager
 from appliance.appliance_service import ApplianceServiceFactory
 from qa.weather_service import WeatherService
+from qa.greeting_service import GreetService
 
 
 
@@ -76,12 +77,25 @@ class GetWeatherIntentResolver(IntentResolver):
         self.storyend = True
         return Reaction(actions, self.intent, self.storyend)
 
+class GreetIntentResolver(IntentResolver):
+    def __init__(self, intent):
+        super(GreetIntentResolver, self).__init__(intent)
+
+    def resolve(self):
+        actions = []
+        r = GreetService().getName(self.overall_intent_entities)
+        actions.append(SendTextAction(r))
+        self.storyend = True
+        return Reaction(actions, self.intent, self.storyend)
+
+
 class IntentResolverFactory(object):
     map = {
         'open_airConditioner': OpenAirConditionerIntentResolver,
         'location': OpenAirConditionerIntentResolver,
         'temperature': OpenAirConditionerIntentResolver,
-        'get_weather': GetWeatherIntentResolver
+        'get_weather': GetWeatherIntentResolver,
+        'greeting':GreetIntentResolver
     }
 
     def __init__(self):

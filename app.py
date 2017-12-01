@@ -72,6 +72,7 @@ def ask():
     """
     data = request.json
     question = data['question']
+    socketio.emit('ask', {'question': question})
     print(question)
     # question = request.form['question']
     # print question
@@ -84,7 +85,7 @@ def ask():
             'say': r['text']
         }
     }
-    socketio.emit(r['intent_type'], r)
+    socketio.emit('response', r)
     return jsonify(resp)
 
 

@@ -2,13 +2,19 @@ import cv2
 import os
 import face_recognition
 import pickle
+from db import conn
 
 
 class FaceRecog(object):
     def __init__(self):
-        pass
+        self.config = conn['config']
 
     def build_face_database(self, person_name):
+        names = self.config.find_one({'name': 'names'})
+        if names is None:
+            self.config.insert_one(dict(name='names', value=[person_name]))
+        else:
+            self.config.update_one({'name': 'names'}, {'$push': {'value': person_name}})
         if not os.path.exists(person_name):
             os.mkdir(person_name)
         cap = cv2.VideoCapture(0)
@@ -17,12 +23,12 @@ class FaceRecog(object):
             cv2.imshow("cam", frame)
             if cv2.waitKey(1) & 0xFF == ord('r'):
                 cv2.imwrite(person_name + "/" + person_name + ".jpeg", frame)
-                with open('name_lists.txt', 'r') as fread:
-                    name_list = pickle.load(fread)
+                # with open('name_lists.txt', 'r') as fread:
+                #     name_list = pickle.load(fread)
                 # name_list = []
-                name_list.append(person_name)
-                with open('name_lists.txt', 'w') as fwrite:
-                    pickle.dump(name_list, fwrite)
+                # name_list.append(person_name)
+                # with open('name_lists.txt', 'w') as fwrite:
+                #     pickle.dump(name_list, fwrite)
                 break
         cap.release()
         cv2.destroyAllWindows()
@@ -35,8 +41,10 @@ class FaceRecog(object):
         # Load a sample picture and learn how to recognize it.
         image_list = []
         encoding_list = []
-        with open('name_lists.txt', 'r') as fread:
-            name_list = pickle.load(fread)
+        # with open('name_lists.txt', 'r') as fread:
+        #     name_list = pickle.load(fread)
+        names = self.config.find_one({'name': 'names'})
+        name_list = names['value']
         for index in range(len(name_list)):
             image_list.append(face_recognition.load_image_file(name_list[index] + "/" + name_list[index] + ".jpeg"))
             encoding_list.append(face_recognition.face_encodings(image_list[index])[0])
@@ -76,20 +84,20 @@ class FaceRecog(object):
             process_this_frame = not process_this_frame
 
             # Display the results
-            for (top, right, bottom, left), name in zip(face_locations, face_names):
-                # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-                top *= 4
-                right *= 4
-                bottom *= 4
-                left *= 4
-
-                # Draw a box around the face
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
-                # Draw a label with a name below the face
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-                font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+            # for (top, right, bottom, left), name in zip(face_locations, face_names):
+            #     # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+            #     top *= 4
+            #     right *= 4
+            #     bottom *= 4
+            #     left *= 4
+            #
+            #     # Draw a box around the face
+            #     cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+            #
+            #     # Draw a label with a name below the face
+            #     cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+            #     font = cv2.FONT_HERSHEY_DUPLEX
+            #     cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
             # Display the resulting image
             # cv2.imshow('Video', frame)
@@ -104,7 +112,11 @@ class FaceRecog(object):
 
 
 if __name__ == '__main__':
-    # person_name = "Hu"
+
+    # add person
+    # person_name = "tan"
     # FaceRecog().build_face_database(person_name)
+
+    # recognition one person
     helloName = FaceRecog().face_recognition()
     print helloName

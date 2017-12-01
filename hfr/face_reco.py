@@ -46,7 +46,8 @@ class FaceRecog(object):
         names = self.config.find_one({'name': 'names'})
         name_list = names['value']
         for index in range(len(name_list)):
-            image_list.append(face_recognition.load_image_file(name_list[index] + "/" + name_list[index] + ".jpeg"))
+            name = os.path.join(os.path.dirname(__file__), name_list[index] + "/" + name_list[index] + ".jpeg")
+            image_list.append(face_recognition.load_image_file(name))
             encoding_list.append(face_recognition.face_encodings(image_list[index])[0])
 
         # Initialize some variables
@@ -112,11 +113,12 @@ class FaceRecog(object):
 
 
 if __name__ == '__main__':
+    pass
 
     # add person
-    # person_name = "tan"
+    # person_name = "fang"
     # FaceRecog().build_face_database(person_name)
 
     # recognition one person
-    helloName = FaceRecog().face_recognition()
-    print helloName
+    # helloName = FaceRecog().face_recognition()
+    # print helloName

@@ -108,7 +108,7 @@ class IntentResolverFactory(object):
         'location': OpenAirConditionerIntentResolver,
         'temperature': OpenAirConditionerIntentResolver,
         'get_weather': GetWeatherIntentResolver,
-        'move': MoveIntentResolver
+        'move': MoveIntentResolver,
         'greeting':GreetIntentResolver
     }
 

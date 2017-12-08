@@ -17,7 +17,8 @@ class WeatherService(Service):
                 city = entities['location'][0]['value']
             weather = self.today_weather(city)
         pm = SensorServiceFactory.get_service('get_pm')().get_data()
-        r = '天气是'+weather['weather']+',pm2.5的含量为'+pm['pm25']+',pm10的含量为'+pm['pm10']
+        light = SensorServiceFactory.get_service('get_light')().get_data()
+        r = '天气是'+weather['weather']+',pm2.5的含量为'+pm['pm25']+',pm10的含量为'+pm['pm10']+',甲醛含量为'+light['HCHO']+'，亮度为'+light['light']
         return r
 
     def today_weather(self, city='shanghai', index=0):
@@ -36,4 +37,3 @@ class WeatherService(Service):
             data['sport'] = r.json()['results'][0]['index'][3]['des']
             data['sunshine'] = r.json()['results'][0]['index'][4]['des']
         return data
-

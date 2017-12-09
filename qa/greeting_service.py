@@ -1,6 +1,8 @@
 #coding=UTF-8
 from service import Service
-from hfr.face_reco import FaceRecog
+import numpy as np
+# from hfr.face_reco import FaceRecog
+
 
 class GreetService(Service):
     def __init__(self):
@@ -8,6 +10,7 @@ class GreetService(Service):
         self.names = {'long': '成龙',
                       'fang': '赵德芳'}
 
-    def getName(self, entities):
-        name = FaceRecog().face_recognition()
+    def getName(self, entities=None):
+        # name = FaceRecog().face_recognition()
+        name = np.random.choice(self.names.keys(),1)
         return '你好,'+self.names[name]

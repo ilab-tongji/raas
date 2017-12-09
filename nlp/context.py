@@ -30,6 +30,13 @@ class ContextManager(object):
         contexts = reduce(lambda x, y: heap(x, y), story['contexts'])
         return contexts
 
+    def get_story_intent(self, storyid):
+        story = self.stories.find_one({'storyid': storyid})
+        if story is None:
+            return None
+        else:
+            return story['intent_type']
+
 if __name__ == '__main__':
     print ContextManager().get_context('a144df92-666b-40c4-9038-c8679b8b40d1')
     #print ContextManager().save_context({'location': 'restroom'}, 'open', 'a144df92-666b-40c4-9038-c8679b8b40d1')

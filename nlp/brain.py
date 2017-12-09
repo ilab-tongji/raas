@@ -26,12 +26,12 @@ class Brain(object):
 
 if __name__ == '__main__':
     brain = Brain()
-    r = brain.listen('今天天气怎么样？')
-    print (r['text'])
-    r = brain.listen('把空调打开')
-    print(r['text'])
-    r = brain.listen('卧室', r['storyid'])
-    print(r['text'])
-    r = brain.listen('25度', r['storyid'])
+    # r = brain.listen('把空调打开')
+    # print(r['text'])
+    # r = brain.listen('卧室', r['storyid'])
+    # print(r['text'])
+    # r = brain.listen('25度', r['storyid'])
+    # print(r['text'])
+    r = brain.listen('看一下今天的签到情况')
     print(r['text'])
 

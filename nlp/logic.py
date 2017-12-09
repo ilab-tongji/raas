@@ -5,6 +5,7 @@ from qa.weather_service import WeatherService
 from move.move_service import MoveService
 from qa.greeting_service import GreetService
 from sensor.sensor_service import SensorServiceFactory
+from signin.signin_service import SigninService
 
 
 class Logic(object):
@@ -30,23 +31,7 @@ class IntentResolver(object):
         raise NotImplementedError
 
 
-# class GetApplicanceLocationIntentResolver(IntentResolver):
-#     def __init__(self, intent):
-#         super(GetApplicanceLocationIntentResolver, self).__init__(intent)
-#
-#     def resolve(self):
-#         actions = []
-#         err, text = service.open(self.intent.entities)
-#         actions.append(SendTextAction(text))
-#         if
-#
-#
-# class GetApplicanceTemperatureIntentResolver(IntentResolver):
-#     def __init__(self, intent):
-#         super(GetApplicanceTemperatureIntentResolver, self).__init__(intent)
-#
-#     def resolve(self):
-#         return 2
+
 
 
 class OpenAirConditionerIntentResolver(IntentResolver):
@@ -115,15 +100,26 @@ class SensorIntentResolver(IntentResolver):
         return Reaction(actions, self.intent, self.storyend)
 
 
+class CheckinIntentResolver(IntentResolver):
+    def __init__(self, intent):
+        super(CheckinIntentResolver, self).__init__(intent)
+
+    def resolve(self):
+        actions = []
+        r = SigninService().check()
+        actions.append(SendTextAction(r['text']))
+        return Reaction(actions, self.intent, self.storyend)
+
+
 class IntentResolverFactory(object):
     map = {
         'open_airConditioner': OpenAirConditionerIntentResolver,
-        'location': OpenAirConditionerIntentResolver,
         'temperature': OpenAirConditionerIntentResolver,
         'get_weather': GetWeatherIntentResolver,
         'move': MoveIntentResolver,
         'greeting': GreetIntentResolver,
-        'sensor': SensorIntentResolver
+        'sensor': SensorIntentResolver,
+        'check_signin': CheckinIntentResolver
     }
 
     def __init__(self):
@@ -131,7 +127,12 @@ class IntentResolverFactory(object):
 
     @classmethod
     def get_resolver(cls, intent):
-        return cls.map.get(intent.intent_type, None)(intent)
+        if intent.storyid is None:
+            intent_t = intent.intent_type
+        else:
+            contextmgr = ContextManager()
+            intent_t = contextmgr.get_story_intent(intent.storyid)
+        return cls.map.get(intent_t, None)(intent)
 
 if __name__ == '__main__':
     from mockdata import data, data2

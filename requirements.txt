@@ -9,6 +9,6 @@ wit
 pyaudio
 flask-socketio
 gevent
-serial
+ser
 opencv-python
 face_recognition

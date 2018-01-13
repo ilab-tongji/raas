@@ -83,6 +83,10 @@ class GreetIntentResolver(IntentResolver):
     def resolve(self):
         actions = []
         r = GreetService().getName(self.overall_intent_entities)
+        try:
+            MoveService().shake_head()
+        except:
+            pass
         actions.append(SendTextAction(r))
         self.storyend = True
         return Reaction(actions, self.intent, self.storyend)

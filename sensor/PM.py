@@ -7,12 +7,12 @@ import binascii
 
 def my_pm():
     # try:
-    #     ser = serial.Serial(port="COM3", baudrate=9600)
-    #     return get_data(ser)
+    ser = serial.Serial(port="COM6", baudrate=9600)
+    return get_data(ser)
     # except:
     #     ser.close()
-    pm_data = {'pm25': '18', 'pm10': '10'}
-    return pm_data
+    # pm_data = {'pm25': '18', 'pm10': '10'}
+    # return pm_data
 
 
 def get_data(ser):

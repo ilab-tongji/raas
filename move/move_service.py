@@ -1,5 +1,6 @@
 #coding=UTF-8
 
+import requests
 
 direction={
     'on': 'move forward instruction',
@@ -11,6 +12,8 @@ direction={
 
 class MoveService():
     def __init__(self):
+        self.url = 'http://192.168.31.111:'
+        self.port = 5000
         pass
 
     def move(self, entities):
@@ -21,3 +24,8 @@ class MoveService():
             print direction[dirc]
         res = {'err': None, 'text': '好的'}
         return res
+
+    def shake_head(self):
+        requests.get(self.url+str(self.port)+'/wavehand')
+
+

@@ -18,7 +18,8 @@ class WeatherService(Service):
             weather = self.today_weather(city)
         pm = SensorServiceFactory.get_service('get_pm')().get_data()
         light = SensorServiceFactory.get_service('get_light')().get_data()
-        r = '天气是'+weather['weather']+',pm2.5的含量为'+pm['pm25']+',pm10的含量为'+pm['pm10']+',甲醛含量为'+light['HCHO']+'，亮度为'+light['light']
+        t_h = SensorServiceFactory.get_service('get_t_h')().get_data()
+        r = '天气是'+weather['weather']+',pm2.5的含量为'+pm['pm25']+',pm10的含量为'+pm['pm10']+',甲醛含量为'+light['HCHO']+'，亮度为'+light['light']+',温度为'+t_h['t']+',湿度为'+t_h['h']
         return r
 
     def today_weather(self, city='shanghai', index=0):

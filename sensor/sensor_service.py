@@ -3,6 +3,7 @@
 from service import Service
 import PM
 import light
+from humiture import Python_USB_I2C_AM2321B
 
 
 class SensorService(Service):
@@ -20,8 +21,8 @@ class PMService(SensorService):
 
     def get_data(self):
         pm = PM.my_pm()
-        #re_pm = 'pm2.5含量为'+pm['pm2.5']+'pm10含量为'+pm['pm10']
-        return pm
+        re_pm = 'pm2.5含量为'+pm['pm2.5']+'pm10含量为'+pm['pm10']
+        return re_pm
 
 class LightService(SensorService):
     def __init__(self):
@@ -31,13 +32,22 @@ class LightService(SensorService):
         li = light.my_sensor()
         return li
 
+class HumitureService(SensorService):
+    def __init__(self):
+        super(LightService, self).__init__('humiture')
+
+    def get_data(self):
+        t_h = Python_USB_I2C_AM2321B.get_data()
+        return t_h
+
 
 class SensorServiceFactory(object):
     def __init__(self):
         pass
     service_map = {
         'get_pm': PMService,
-        'get_light': LightService
+        'get_light': LightService,
+        'get_t_h': HumitureService
     }
 
     @classmethod

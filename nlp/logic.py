@@ -64,6 +64,21 @@ class GetWeatherIntentResolver(IntentResolver):
         return Reaction(actions, self.intent, self.storyend)
 
 
+
+class GetEnvironmentIntentResolver(IntentResolver):
+    def __init__(self, intent):
+        super(GetEnvironmentIntentResolver,self).__init__(intent)
+
+    def resolve(self):
+        actions = []
+        r = WeatherService().getEnvironment(self.overall_intent_entities)
+        actions.append(SendTextAction(r))
+        self.storyend = True
+        return Reaction(actions, self.intent, self.storyend)
+
+
+
+
 class MoveIntentResolver(IntentResolver):
     def __init__(self, intent):
         super(MoveIntentResolver, self).__init__(intent)
@@ -123,7 +138,8 @@ class IntentResolverFactory(object):
         'move': MoveIntentResolver,
         'greeting': GreetIntentResolver,
         'sensor': SensorIntentResolver,
-        'check_signin': CheckinIntentResolver
+        'check_signin': CheckinIntentResolver,
+        'environment': GetEnvironmentIntentResolver
     }
 
     def __init__(self):
